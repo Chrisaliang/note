@@ -1,0 +1,210 @@
+今日：技术总结：
+
+蓝牙(ble)：
+  蓝牙从4.3开始有了传统蓝牙和低功耗蓝牙的区别，低功耗蓝牙使用GATT协议，定义了三个概念：
+    服务(service)，服务就是characteristic的集合
+    特征(characteristic)，可以理解为一个类，包含了一个value和0到多个对该value的描述
+    描述(descriptor)，对characteristic的描述
+
+  需要的权限：
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+  限制支持蓝牙的设备使用：
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
+
+  使用步骤：
+    1.初始化蓝牙适配器
+    final BluetoothManager bluetoothManager =
+      (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+      mBluetoothAdapter = bluetoothManager.getAdapter();
+
+    2.开启蓝牙
+      if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
+        Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+        // 申请打开蓝牙
+        startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+      }
+
+    3.发现设备
+        mBluetoothAdapter.startLeScan(mLeScanCallback);
+        private BluetoothAdapter.LeScanCallback mLeScanCallback =
+                new BluetoothAdapter.LeScanCallback() {
+            @Override
+            public void onLeScan(final BluetoothDevice device, int rssi,
+                    byte[] scanRecord) {
+
+            }
+        };
+
+    4.连接设备
+      mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
+      private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
+         @Override
+         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+             String intentAction;
+             if (newState == BluetoothProfile.STATE_CONNECTED) {
+                 mConnectionState = STATE_CONNECTED;
+                 // 开始查找服务，只有找到服务才算是真的连接上
+                 mBluetoothGatt.discoverServices();
+             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                 intentAction = ACTION_GATT_DISCONNECTED;
+                 mConnectionState = STATE_DISCONNECTED;
+             }
+         }
+
+         @Override
+         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+             if (status == BluetoothGatt.GATT_SUCCESS) {
+
+             } else {
+
+             }
+         }
+
+         @Override
+         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+             super.onCharacteristicWrite(gatt, characteristic, status);
+         }
+
+         @Override
+         public void onCharacteristicRead(BluetoothGatt gatt,
+                                          BluetoothGattCharacteristic characteristic,
+                                          int status) {
+             if (status == BluetoothGatt.GATT_SUCCESS) {
+             }
+         }
+
+         @Override
+         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+               byte[] data = characteristic.getValue();
+         }
+      };
+
+    5.characteristic监听设置
+      BluetoothGattService service = mBluetoothGatt.getService(SERVICE_UUID);
+      if (service == null) {
+          L.e("未找到蓝牙中的对应服务");
+          return;
+      }
+      BluetoothGattCharacteristic characteristic= service.getCharacteristic(CharacteristicUUID);
+      if (characteristic== null) {
+          L.e("未找到蓝牙中的对应特征");
+          return;
+      }
+      //设置true为启用通知,false反之
+      mBluetoothGatt.setCharacteristicNotification(characteristic, true);
+
+      //下面为开启蓝牙notify功能,向CCCD中写入值1
+      BluetoothGattDescriptor descriptor = characteristic.getDescriptor(CCCD);
+      descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+      mBluetoothGatt.writeDescriptor(descriptor);
+
+    6.向蓝牙发送数据
+      public void writeRXCharacteristic(byte[] value) {
+        if (mBluetoothGatt == null) {
+            return;
+        }
+        BluetoothGattService service= mBluetoothGatt.getService(SERVICE_UUID);
+        BluetoothGattCharacteristic characteristic= service.getCharacteristic(UUID);
+        characteristic.setValue(value);
+        mBluetoothGatt.writeCharacteristic(characteristic);
+      }
+
+    7.数据分包处理
+      //存储待发送的数据队列
+      private Queue<byte[]> dataInfoQueue = new LinkedList<>();
+      private Handler handler = new Handler() {
+          @Override
+          public void handleMessage(Message msg) {
+              super.handleMessage(msg);
+          }
+      };
+
+      private Runnable runnable = new Runnable() {
+          @Override
+          public void run() {
+              send();
+          }
+      };
+
+      /**
+       * 向characteristic写数据
+       *
+       * @param value
+       */
+      public void writeCharacteristic(BluetoothGattCharacteristic characteristic, byte[] value) {
+          this.mCharacteristic = characteristic;
+          if (dataInfoQueue != null) {
+              dataInfoQueue.clear();
+              dataInfoQueue = splitPacketFor20Byte(value);
+              handler.post(runnable);
+          }
+          // characteristic.setValue(value);
+          // mBluetoothGatt.writeCharacteristic(characteristic);
+      }
+
+      private void send() {
+          if (dataInfoQueue != null && !dataInfoQueue.isEmpty()) {
+              //检测到发送数据，直接发送
+              if (dataInfoQueue.peek() != null) {
+                  this.mCharacteristic.setValue(dataInfoQueue.poll());//移除并返回队列头部的元素
+                  mBluetoothGatt.writeCharacteristic(mCharacteristic);
+              }
+              //检测还有数据，延时后继续发送，一般延时100毫秒左右
+              if (dataInfoQueue.peek() != null) {
+                  handler.postDelayed(runnable, 200);
+              }
+          }
+      }
+
+      //数据分包处理
+      private Queue<byte[]> splitPacketFor20Byte(byte[] data) {
+          Queue<byte[]> dataInfoQueue = new LinkedList<>();
+          if (data != null) {
+              int index = 0;
+              do {
+                  byte[] surplusData = new byte[data.length - index];
+                  byte[] currentData;
+                  System.arraycopy(data, index, surplusData, 0, data.length - index);
+                  if (surplusData.length <= 20) {
+                      currentData = new byte[surplusData.length];
+                      System.arraycopy(surplusData, 0, currentData, 0, surplusData.length);
+                      index += surplusData.length;
+                  } else {
+                      currentData = new byte[20];
+                      System.arraycopy(data, index, currentData, 0, 20);
+                      index += 20;
+                  }
+                  dataInfoQueue.offer(currentData);
+              } while (index < data.length);
+          }
+          return dataInfoQueue;
+      }
+
+greenDao3
+
+rxAndroid
+
+dagger2
+
+高德地图
+  调用高德地图：
+    Intent intent = new Intent();
+    intent.setAction(Intent.ACTION_VIEW);
+    intent.addCategory(Intent.CATEGORY_DEFAULT);
+    //将功能Scheme以URI的方式传入data
+    Uri uri = Uri.parse("androidamap://navi?sourceApplication=appname&amp;poiname=fangheng&amp;lat=36.547901&amp;lon=104.258354&amp;dev=1&amp;style=2");
+    intent.setData(uri);
+    //启动该页面即可
+    startActivity(intent);
+
+
+    接下来的一段代码是相当牛的代码，可以调用起手机中已经安装的所有的地图软件，只有一个的时候默认调用起来，如果有多个的时候提供用户选择
+      Uri mUri = Uri.parse("geo:39.940409,116.355257?q=西直门");
+      Intent mIntent = new Intent(Intent.ACTION_VIEW,mUri);
+      startActivity(mIntent);
+
+    //------------------------

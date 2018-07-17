@@ -1,0 +1,35 @@
+Merry Christmas£ºand happy New year
+
+OnFragmentInterractionListener
+
+
+ E/MainFragment: onAttach: activity
+ E/MainFragment: onAttach: 
+ E/MainFragment: onCreate: 
+ E/MainFragment: onCreateView: 
+ E/MainFragment: onViewCreated: 
+ E/MainFragment: onActivityCreated: 
+ E/MainFragment: onViewStateRestored: 
+ E/MainFragment: onStart: 
+ E/MainFragment: onResume: 
+ E/MainFragment: onPause: 
+ E/MainFragment: onStop: 
+ E/MainFragment: onDestroyView: 
+ E/MainFragment: onDestroy: 
+ E/MainFragment: onDetach: 
+
+
+ E/MainFragment: onAttach: activity
+ E/MainFragment: onAttach: 
+ E/MainFragment: onCreate: 
+ E/MainFragment: onCreateView: 
+ E/MainFragment: onViewCreated: 
+ E/MainFragment: onActivityCreated: 
+ E/MainFragment: onViewStateRestored: 
+ E/MainFragment: onStart: 
+ E/MainFragment: onResume: 
+ E/MainFragment: onPause: 
+ E/MainFragment: onStop: 
+ E/MainFragment: onDestroyView: 
+ E/MainFragment: onDestroy: 
+ E/MainFragment: onDetach: 

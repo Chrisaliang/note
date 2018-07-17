@@ -1,0 +1,236 @@
+编写文档，修改bug
+
+com.uaes.android.ui.gasstation.GasStationActivity
+
+    // 导航工具初始化失败
+    @Override
+    public void onInitNaviFailure() {
+
+    }
+
+    // 导航工初始化成功
+    @Override
+    public void onInitNaviSuccess() {
+
+    }
+
+    /**
+     * 开始导航
+     *
+     * @param naviType 导航类型参数 {@link com.amap.api.navi.enums.NaviType}
+     */
+    @Override
+    public void onStartNavi(int naviType) {
+
+    }
+
+    // 当前方路况光柱信息有更新时回调函数。
+    @Override
+    public void onTrafficStatusUpdate() {
+
+    }
+
+    // 当GPS位置有更新时的回调函数。
+    //参数:
+    // location - 当前位置的定位信息。
+    @Override
+    public void onLocationChange(AMapNaviLocation aMapNaviLocation) {
+
+    }
+
+    // 导航播报信息回调函数。
+    // 参数:
+    // text - 播报文字。
+    // 已经过时
+    @Override
+    public void onGetNavigationText(int i, String text) {
+
+    }
+
+    // 导航播报信息回调函数。
+    //参数:
+    //text - 播报文字。
+    // 从以下版本开始:
+    //       5.3.0
+    @Override
+    public void onGetNavigationText(String text) {
+
+    }
+
+    // 模拟导航停止后回调函数。
+    @Override
+    public void onEndEmulatorNavi() {
+
+    }
+
+    // 到达目的地后回调函数。
+    @Override
+    public void onArriveDestination() {
+
+    }
+
+    /**
+     * 步行或者驾车路径规划失败后的回调函数。
+     * 参数:
+     * errorInfo - {@link PathPlanningErrCode}
+     */
+    @Override
+    public void onCalculateRouteFailure(int errorInfo) {
+
+    }
+
+    // 偏航后准备重新规划的通知回调。 此方法只是通知准备重算
+    // 事件，开发者不需要在方法中触发算路逻辑，SDK内部会进行算路。
+    @Override
+    public void onReCalculateRouteForYaw() {
+
+    }
+
+    //驾车导航时，如果前方遇到拥堵时需要重新计算路径的回调。
+    @Override
+    public void onReCalculateRouteForTrafficJam() {
+
+    }
+
+    // 驾车路径导航到达某个途经点的回调函数。
+    // 参数:
+    // wayID - 到达途径点的编号，标号从1开始，依次累加。 模拟导航下不工作。
+    @Override
+    public void onArrivedWayPoint(int i) {
+
+    }
+
+    // 用户手机GPS设置是否开启的回调函数。
+    // 参数:
+    // enabled - true,开启;false,未开启。
+    @Override
+    public void onGpsOpenStatus(boolean b) {
+
+    }
+
+    // 导航引导信息回调 naviinfo 是导航信息类。
+    @Override
+    public void onNaviInfoUpdate(NaviInfo naviInfo) {
+
+    }
+
+    //已过时。
+    // 已过时，请使用AMapNaviListener.onNaviInfoUpdate(NaviInfo)
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onNaviInfoUpdated(AMapNaviInfo aMapNaviInfo) {
+
+    }
+
+    // 导航过程中的摄像头信息回调函数
+    //    参数:
+    //    infoArray - 摄像头对象数组
+    @Override
+    public void updateCameraInfo(AMapNaviCameraInfo[] aMapNaviCameraInfos) {
+
+    }
+
+    // 服务区信息回调函数
+//    参数:
+//    infoArray - 服务区对象数组
+    @Override
+    public void onServiceAreaUpdate(AMapServiceAreaInfo[] aMapServiceAreaInfos) {
+
+    }
+
+    //    显示路口放大图回调。
+//    参数:
+//    aMapNaviCross - 路口放大图类，可以获得此路口放大图bitmap
+    @Override
+    public void showCross(AMapNaviCross aMapNaviCross) {
+
+    }
+
+    // 关闭路口放大图回调。
+    @Override
+    public void hideCross() {
+
+    }
+
+    // 显示道路信息回调。
+//    参数:
+//    laneInfos - 道路信息数组，可获得当前道路信息，可用于用户使用自己的素材完全自定义显示。
+//    laneBackgroundInfo - 道路背景数据数组，可用于装载官方的DriveWayView，并显示。
+//    laneRecommendedInfo - 道路推荐数据数组，可用于装载官方的DriveWayView，并显示。
+    @Override
+    public void showLaneInfo(AMapLaneInfo[] aMapLaneInfos, byte[] bytes, byte[] bytes1) {
+
+    }
+
+    // 关闭道路信息回调。
+    @Override
+    public void hideLaneInfo() {
+
+    }
+
+    //    算路成功回调
+//    参数:
+//    routeIds - 路线id数组
+    @Override
+    public void onCalculateRouteSuccess(int[] ints) {
+
+    }
+
+    //    通知当前是否显示平行路切换
+//    参数:
+//    parallelRoadType - 0表示隐藏 1 表示显示主路 2 表示显示辅路
+    @Override
+    public void notifyParallelRoad(int i) {
+
+    }
+
+    // 已过时。
+// 请使用AMapNaviListener.OnUpdateTrafficFacility(AMapNaviTrafficFacilityInfo[])
+    @Override
+    public void OnUpdateTrafficFacility(AMapNaviTrafficFacilityInfo aMapNaviTrafficFacilityInfo) {
+
+    }
+
+    // 巡航模式（无路线规划）下，道路设施信息更新回调
+//    参数:
+//    infos - 道路设施信息
+    @Override
+    public void OnUpdateTrafficFacility(AMapNaviTrafficFacilityInfo[] aMapNaviTrafficFacilityInfos) {
+
+    }
+
+    // 已过时。
+//请使用AMapNaviListener.OnUpdateTrafficFacility(AMapNaviTrafficFacilityInfo[])
+    @SuppressWarnings("deprecation")
+    @Override
+    public void OnUpdateTrafficFacility(TrafficFacilityInfo trafficFacilityInfo) {
+
+    }
+
+    // 巡航模式（无路线规划）下，统计信息更新回调 连续5个点大于15km/h后开始回调
+//    参数:
+//    aimLessModeStat - 巡航模式（无路线规划）下统计信息
+    @Override
+    public void updateAimlessModeStatistics(AimLessModeStat aimLessModeStat) {
+
+    }
+
+    // 巡航模式（无路线规划）下，统计信息更新回调 当拥堵长度大于500米且拥堵时间大于5分钟时回调. 当前方无拥堵信息时，回调的AimLessModeCongestionInfo对象属性值都为空
+//    参数:
+//    aimLessModeCongestionInfo -
+    @Override
+    public void updateAimlessModeCongestionInfo(AimLessModeCongestionInfo aimLessModeCongestionInfo) {
+
+    }
+
+    // 回调各种类型的提示音，类似高德导航"叮".
+//    参数:
+//    type - EPlay_NULL 0 无
+//    EPLay_Reroute 1 偏航重算
+//    EPlay_Ding 100 马上到转向路口的时候发的提示音
+//    EPlay_Dong 101 导航状态下测速电子眼通过音
+//    EPlay_Elec_Ding 102 巡航状态下电子眼（所有类型）通过音
+    @Override
+    public void onPlayRing(int i) {
+
+    }

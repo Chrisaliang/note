@@ -1,0 +1,6 @@
+今日笔记：
+  pl/sql 过程化查询语句
+    注意：
+      1）select into 查询子句中只能有一个结果，不能有多个，也不能为空
+      2）select 循环 查询子句中可以有多个结果，也可以为空
+  declare 声明subsititution variable 时，字符类型的变量要加引号

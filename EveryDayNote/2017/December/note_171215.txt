@@ -1,0 +1,26 @@
+today: xiot first day
+
+
+
+    private void getCalendar() {
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALENDAR)
+                != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        @SuppressLint("Recycle") Cursor cursor = getActivity().getContentResolver()
+                .query(CalendarContract.Calendars.CONTENT_URI,
+                        null,
+                        CalendarContract.Calendars.VISIBLE + " = 1",
+                        null,
+                        CalendarContract.Calendars._ID + " ASC"
+                );
+        StringBuilder stringBuilder = new StringBuilder();
+        if (cursor != null && cursor.moveToFirst()) {
+//            do {
+//
+//                stringBuilder.append(String.format(
+//                        Locale.CHINESE, "id:%d\nname:%s\naccountName:%s\naccountType:%s\n",
+//                        id, name, accountName, accountType));
+//            } while (cursor.moveToNext());
+        }
+    }

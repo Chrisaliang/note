@@ -1,0 +1,37 @@
+test period , debug
+
+layout optimize :
+
+merge
+
+ 1.merge必须放在布局文件的根节点上。
+ 2.merge并不是一个ViewGroup，也不是一个View，它相当于声明了一些视图，等待被添加。
+ 3.merge标签被添加到A容器下，那么merge下的所有视图将被添加到A容器下。
+ 4.因为merge标签并不是View，所以在通过LayoutInflate.inflate方法渲染的时候， 第二个
+   参数必须指定一个父容器，且第三个参数必须为true，也就是必须为merge下的视图指定一个父亲节点。
+ 5.如果Activity的布局文件根节点是FrameLayout，可以替换为merge标签，这样，执行setContentView之后，会减少一层FrameLayout节点。
+ 6.自定义View如果继承LinearLayout，建议让自定义View的布局文件根节点设置成merge，这样能少一层结点。
+ 7.因为merge不是View，所以对merge标签设置的所有属性都是无效的。
+
+用油状态 http 500
+
+{"timestamp":"2017-11-21 06:34:23","status":500,"error":"Internal Server Error",
+"exception":"com.netflix.hystrix.exception.HystrixRuntimeException",
+"message":"FuelFillClient#getFillRecord(String) failed and no fallback available.",
+"path":"/v1/carService/getFuelHelperByVin"}
+
+
+单次加油记录 http 500
+
+{"timestamp":"2017-11-21 06:36:18","status":500,"error":"Internal Server Error",
+"exception":"java.lang.NumberFormatException",
+"message":"For input string: \"∞\"",
+"path":"/v1/fillRecord/app/findListPageApp"}
+
+
+累计加油记录 http 400
+
+{"message":"数据为空"}
+
+
+用油历史

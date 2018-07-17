@@ -1,0 +1,102 @@
+今日内容:
+  完成手机定位功能
+  使用高德地图开放api
+
+
+  debug.keystore的sha1
+  07:A2:AF:B7:2F:C7:8A:34:7E:AC:1A:44:5E:07:09:84:8D:42:72:07
+
+
+
+总结：
+
+  高德地图api：
+    实现定位：
+
+    if (aMap == null) {
+         aMap = mapView.getMap();
+     }
+
+     aMap.setMyLocationEnabled(true);
+     aMap.setTrafficEnabled(true);
+     aMap.setMapType(AMap.MAP_TYPE_NORMAL);
+
+     MyLocationStyle locationStyle = new MyLocationStyle();
+     locationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);
+     locationStyle.interval(1000);
+
+     aMap.setMyLocationStyle(locationStyle);
+
+     UiSettings uiSettings = aMap.getUiSettings();
+      uiSettings.setZoomControlsEnabled(true);
+      uiSettings.setCompassEnabled(true);
+      uiSettings.setZoomInByScreenCenter(true);
+      uiSettings.setMyLocationButtonEnabled(true);
+      uiSettings.setScaleControlsEnabled(true);
+
+
+      mLocationClient = new AMapLocationClient(this);
+     mLocationOption = new AMapLocationClientOption();
+
+     // 设置返回信息
+     mLocationOption.setNeedAddress(true);
+//        mLocationOption.setLocationCacheEnable(true);
+     mLocationClient.setLocationListener(locationListener);
+     mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+     mLocationOption.setInterval(2000);
+
+     mLocationClient.setLocationOption(mLocationOption);
+
+     mLocationClient.startLocation();
+
+
+
+     private AMapLocationListener locationListener = new AMapLocationListener() {
+       @Override
+       public void onLocationChanged(AMapLocation aMapLocation) {
+           if ( aMapLocation != null) {
+//                listener.onLocationChanged(aMapLocation);
+               if (aMapLocation.getErrorCode() == 0) {
+                   //定位成功
+                   int locationType = aMapLocation.getLocationType();// 获取当前定位结果来源，如网络定位
+                   double latitude = aMapLocation.getLatitude();// 获取纬度
+                   double longitude = aMapLocation.getLongitude();// 获取经度
+                   float accuracy = aMapLocation.getAccuracy();// 获取精度信息
+                   double altitude = aMapLocation.getAltitude(); // 获取海拔信息
+                   float speed = aMapLocation.getSpeed(); // 获取速度信息
+                   float bearing = aMapLocation.getBearing(); // 获取方向角
+                   String buildingId = aMapLocation.getBuildingId(); // 获取建筑物的id信息
+                   String floor = aMapLocation.getFloor(); // 获取楼层信息
+                   SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                   Date date = new Date(aMapLocation.getTime());
+                   df.format(date);//定位时间
+                   String address = aMapLocation.getAddress();
+                   String country = aMapLocation.getCountry();
+                   String province = aMapLocation.getProvince();
+                   String city = aMapLocation.getCity();
+                   String district = aMapLocation.getDistrict();
+                   String street = aMapLocation.getStreet();
+                   String streetNum = aMapLocation.getStreetNum();
+                   String cityCode = aMapLocation.getCityCode();
+                   String adCode = aMapLocation.getAdCode();
+                   String aoiName = aMapLocation.getAoiName();
+
+
+                   Log.w(TAG, "location msg:\r\n " +
+                           "locationType:" + locationType +
+                           "\n" +
+                           " latitude:" + latitude +
+                           "\n" +
+                           " longitude:" + longitude +
+                           "\n" +
+                           " accuracy:" + accuracy);
+               }
+           } else {
+               //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
+               Log.e("AmapError", "location Error, ErrCode:"
+                       + aMapLocation.getErrorCode() + ", errInfo:"
+                       + aMapLocation.getErrorInfo());
+           }
+   };
+
+    实现地图选点：

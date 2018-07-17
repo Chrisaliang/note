@@ -1,0 +1,29 @@
+今日：扫描二维码 ☆☆☆☆
+
+难点：
+
+
+移动位
+
+无符号右移
+
+
+拦截器添加请求头：
+
+  @Override
+  public Response intercept(@NonNull Chain chain) throws IOException {
+       Request request = chain.request();
+       Request.Builder builder = request.newBuilder();
+       if (TextUtils.isEmpty(token)) {
+           token = sp.getString("Token", "");
+           String string = Base64.encodeToString("client:secret".getBytes(), Base64.NO_WRAP);
+           Log.d("Authorization", "before: client:secret; after: " + string);
+           builder.header("Authorization", "Basic " + string);
+       } else {
+           builder.header("Authorization", "Bearer " + token);
+       }
+       Request build = builder
+              // .headers(request.headers())
+               .build();
+       return chain.proceed(build);
+   }

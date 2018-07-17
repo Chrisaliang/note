@@ -1,0 +1,26 @@
+今日：完成数据可视化插件引入
+
+
+动态添加optionMenu
+
+  // 这个方法，系统只会调用一次，invalidateOptionsMenu()会再调用一次
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+      int count = 5;
+      menu.clear();
+      getMenuInflater().inflate(R.menu.menu_bound_device, menu);
+      for (Scene scene : scenes) {
+          menu.add(1, scene.scene_id, count++, scene.scene_name);
+      }
+      return super.onCreateOptionsMenu(menu);
+  }
+
+  // 这个方法会调用多次，每次点击的时候都会调用
+  @Override
+  public boolean onPrepareOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.menu_bound_device,menu);
+    return super.onPrepareOptionsMenu(menu);
+  }
+
+  // 重新加载选项菜单
+  invalidateOptionsMenu();

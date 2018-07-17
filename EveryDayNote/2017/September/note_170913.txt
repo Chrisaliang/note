@@ -1,0 +1,29 @@
+今日：和服务器进行接口测试
+
+
+踩坑：
+
+android.content.res.Resources$NotFoundException: String resource ID #0x0 找不到资源文件ID #0x0
+
+原因分析如下：
+
+遇到这种情况，很有可能是把一个int型业务数据的 设置setText（）或者类似的方法中，
+这样Android系统就会主动去资源文件当中寻找， 但是它不是一个资源文件ID，
+所以就会报出这个bug。 将int型业务数据，转换成String类型即可。
+
+
+目前只有产品有属性，设备没有属性，如果要操作设备的属性的时候要怎么做
+
+Liang The third jar
+
+// It's sad to think about my salary now, what I can do is work hard, but nothing repay,
+// so what should I do
+// don't think about GF, don't think about marriage, don't think about family, so who is my friend
+// It is really upset me, but I should upstand with my Lord lorem
+
+I know Jerry
+
+// change myself, thing has changed
+
+
+Copyright (c) 2017 Chris aLiang Copyright Holder All Rights Reserved.

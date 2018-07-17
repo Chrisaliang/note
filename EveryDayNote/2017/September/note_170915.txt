@@ -1,0 +1,42 @@
+今日：another day to dawdle
+
+pm doesn't know waht should we do, everyone has his own work, but nothing it is.
+
+
+dawdle
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+http://localhost/v1/device
+http://localhost/v1/user
+
+
+192.168.3.114:8379/v1/device/findByProductId
+
+192.168.3.114:8378/v1/user/blind
+
+
+
+  {
+    "userId":1,
+    "id":0,
+    "devices":[
+      {
+        "devicesId":1,
+        "devicesName":"baoma",
+        "devicesAlias":"赵亮的宝马"
+      }
+    ]
+
+  }

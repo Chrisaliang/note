@@ -1,0 +1,81 @@
+PL/SQL 游标带参数：
+  cursor cur(hiredate date)
+
+    一般游标中，SELECT语句都没有WHERE子句，或者用WHERE子句指定了一个固定的条件，这样每次都查询同样的数据。
+在更多的情况下，可能要根据实际情况查询不同的数据。为了通过游标对数据进行更加灵活的处理，可以为游标定义参数，
+这些参数可以用在WHERE子句中。在打开游标时，指定实际的参数值，这样游标在每次打开时，可以根据不同的实际参数值，
+返回所需的不同数据。
+
+  定义带参数的游标的语法格式为：
+
+  DECLARE
+  CURSOR 游标名(参数1, 参数2, ...)
+  IS
+  SELECT语句;
+
+  其中参数的定义方法与子程序中的参数定义完全相同，可以指定默认值，指定参数传递模式。默认的参数传递模式为IN，
+如果要使用OUT或者“IN OUT”模式，就需要明确指定。由于游标一般不需要通过参数向调用者传递数据，所以OUT模式在游
+标中没有什么实际用处。
+
+  在用OPEN命令打开游标时，要向游标提供实际参数，游标根据提供的参数值，查询符合条件的数据。打开游标的语法格式为：
+
+  OPEN游标名(实际参数1, 实际参数2...);
+
+   例：
+
+  DECLARE
+    CURSOR cur_6(d_no IN emp.deptno%type,
+    min_sal IN emp.sal%type := 1000)
+     IS SELECT ename, sal, hiredate
+     FROM emp WHERE deptno = d_no and sal >= min_sal;
+     e cur_6%rowtype;
+  BEGIN
+    if not cur_6%ISOPEN then    --如果游标没有打开，则打开它
+          open cur_6(20, 2000);
+    END if;
+     fetch cur_6    INTO e; --取出第一行数据
+      while cur_6%found loop
+      dbms_output.put_line('姓名：' || e.ename || '工资：' || e.sal ||
+                              ' 工作时间：' || e.hiredate);
+     fetch cur_6      INTO e;
+     END loop;
+       dbms_output.put_line('员工总数：' || cur_6%rowcount); --获取的总行数
+         close cur_6; --关闭游标
+  END;
+
+  这个块的执行结果为：
+
+  姓名：JONES 工资：2975 工作时间：02-4月-81  姓名：SCOTT 工资：3000 工作时间：19-4月-87  姓名：FORD 工资：3000 工作时间：03-12月-81  员工总数：3
+
+  在这个例子中，用传统的循环方法处理游标。首先定义了一个带参数的游标，参数d_no表示部门编号，min_sal表示最低工资，两个参数的传递模式都是IN。游标的功能是查询属于指定部门并且工资不低于指定值的所有员工。
+
+  在打开游标时，指定了两个实际参数20和2000，这样，检索出来的数据就是属于部门20，并且工资不低于2000的所有员工。如果再次以“open cur_6（10,3000）”的形式打开游标，那么检索到的数据就是属于部门10，并且工资不低于3000的员工。由此可见，带参数的游标在查询数据时更加灵活。
+
+  如果要用FOR循环处理游标中的数据，可以按照同样的方法定义游标。由于没有使用OPEN命令打开游标，所以实际参数在FOR语句中指定。这时FOR语句的格式为：
+
+  FOR 变量 IN 游标(实际参数1, 实际参数2...) LOOP  ...  END LOOP;
+
+  在循环开始执行时，游标自动打开，并根据指定的实际参数查询数据。例如，用FOR循环处理带参数的游标，对上面的PL/SQL块进行修改，代码如下：
+
+  DECLARE
+    CURSOR cur_7(d_no emp.deptno%type, min_sal emp.sal%type) IS
+      SELECT ename, sal, hiredate
+        FROM emp
+       WHERE deptno = d_no
+         and sal >= min_sal;
+    e_count integer := 0;
+  BEGIN
+    FOR e IN cur_7(10, 3000) LOOP
+      dbms_output.put_line('姓名：' || e.ename || ' 工资：
+     ' || e.sal || ' 工作时间：' || e.hiredate);
+      e_counte_count := e_count + 1;
+    END LOOP;
+    dbms_output.put_line('员工总数：' || e_count);
+  END;
+
+
+
+  执行结果为：
+
+  姓名：KING 工资：5000 工作时间：17-11月-81
+  员工总数：1

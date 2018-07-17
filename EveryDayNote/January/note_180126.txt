@@ -1,0 +1,24 @@
+modify UI
+
+[
+  {
+    "fuelUseSum": 28,
+    "mileage": 100
+  },
+  {
+    "fuelUseSum": 52.5,
+    "mileage": 200
+  },
+  {
+    "fuelUseSum": 85,
+    "mileage": 300
+  },
+  {
+    "fuelUseSum": 90,
+    "mileage": 400
+  },
+  {
+    "fuelUseSum": 115,
+    "mileage": 500
+  }
+]

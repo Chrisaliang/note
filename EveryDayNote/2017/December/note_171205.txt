@@ -1,0 +1,140 @@
+today：lifecycle
+
+
+//    private class FuelRecordPointSingleObserver extends AuthorizationSingleObserver<DomainFuelRecord> {
+//
+//        FuelRecordPointSingleObserver(Context context) {
+//            super(context);
+//        }
+//
+//        @Override
+//        public void onSubscribe(Disposable d) {
+//            Log.d(TAG, "onSubscribe: " + d);
+//            mDisposable = d;
+//            mNavigator.showLoading();
+//        }
+//
+//        @Override
+//        public void onSuccess(DomainFuelRecord chartData) {
+//            showChart(chartData);
+//            mNavigator.dismissLoading();
+//        }
+//
+//        @Override
+//        public void onError(Throwable e) {
+//            super.onError(e);
+//            Log.d(TAG, "onError: ", e);
+//            mNavigator.dismissLoading();
+//            Toast.makeText(getActivity(), "获取累计用油失败", Toast.LENGTH_SHORT).show();
+//        }
+//    }
+
+
+//        View view = inflater.inflate(R.layout.fragment_fuel_manager_fuel_record, container, false);
+//        lineChart = view.findViewById(R.id.line_chart);
+//        initChart();
+
+    private void initChart() {
+       Description desc = new Description();
+       desc.setEnabled(false);
+       lineChart.setTouchEnabled(false);
+       lineChart.setDescription(desc);
+       lineChart.setNoDataText("没有数据");
+       lineChart.setNoDataTextColor(Color.BLUE);//没有数据时显示文字的颜色
+       lineChart.setDrawGridBackground(false);//chart 绘图区后面的背景矩形将绘制
+       lineChart.setDrawBorders(false);//禁止绘制图表边框的线
+       lineChart.setScaleEnabled(false);
+       lineChart.setPinchZoom(true);
+       lineChart.setExtraOffsets(24, 24, 24, 24);
+       // 图示，显示label
+       Legend legend = lineChart.getLegend();
+       legend.setEnabled(false);
+       XAxis xAxis = lineChart.getXAxis();
+//        xAxis.setDrawLabels(true);
+//        xAxis.setDrawAxisLine(true);
+       xAxis.setGranularityEnabled(true);
+       xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+       xAxis.setAxisLineWidth(3);
+       xAxis.setAxisLineColor(Color.WHITE);
+       xAxis.setTextSize(16);
+       xAxis.setTextColor(Color.WHITE);
+       xAxis.setDrawGridLines(false);
+       YAxis y1 = lineChart.getAxisLeft();
+       // 设置Y轴从0开始
+       y1.setAxisMinimum(0);
+       y1.setDrawAxisLine(true);
+       y1.setAxisLineWidth(3);
+       y1.setDrawLabels(true);
+       y1.setLabelCount(1);
+       y1.setTextColor(Color.WHITE);
+       y1.setTextSize(20);
+       y1.setAxisLineColor(Color.WHITE);
+       y1.setDrawGridLines(false);
+       //y1.setSpaceTop(20);
+       y1.setDrawLimitLinesBehindData(true);
+
+       // 设置右侧Y轴不显示
+       lineChart.getAxisRight().setEnabled(false);
+       lineChart.setExtraBottomOffset(16);
+       // 设置动画
+       lineChart.animateY(300, Easing.EasingOption.Linear);
+       lineChart.animateX(300, Easing.EasingOption.Linear);
+   }
+
+   private void showChart(DomainFuelRecord chartData) {
+       if (lineChart.getData() != null && lineChart.getData().getDataSetCount() > 0) {
+           lineChart.getData().clearValues();
+           for (ILineDataSet lineDatum : chartData.lineData) {
+               lineChart.getData().addDataSet(lineDatum);
+           }
+           lineChart.getData().notifyDataChanged();
+       } else {
+           LineData data = new LineData(chartData.lineData);
+           lineChart.setData(data);
+       }
+       lineChart.getXAxis().setAxisMaximum(chartData.xMax);
+       lineChart.getXAxis().setGranularity(chartData.xMax / 5);
+       lineChart.getXAxis().setLabelCount(6, true);
+       lineChart.getXAxis().setValueFormatter(new IAxisValueFormatter() {
+           @Override
+           public String getFormattedValue(float value, AxisBase axis) {
+               return String.valueOf((int) value);
+           }
+       });
+       lineChart.getAxisLeft().setGranularity(chartData.yMax);
+       lineChart.getAxisLeft().setValueFormatter(new IAxisValueFormatter() {
+           @Override
+           public String getFormattedValue(float value, AxisBase axis) {
+               if (value >= 1) {
+                   return String.valueOf(value);
+               } else {
+                   return "";
+               }
+           }
+       });
+       lineChart.getAxisLeft().setAxisMaximum(getRoundTopValue(chartData.yMax));
+//        if (!dataSets.isEmpty())
+       lineChart.getAxisLeft().addLimitLine(createNewLine(chartData.yMax, getString(R.string.fuel_manager_fuel_record_limit_line_label)));
+       //绘制图表
+       lineChart.getData().notifyDataChanged();
+       lineChart.invalidate();
+   }
+
+
+
+       private float getRoundTopValue(float yMax) {
+           return yMax * 1.1f;
+       }
+
+       @SuppressWarnings("SameParameterValue")
+       private LimitLine createNewLine(float limit, String label) {
+           LimitLine l = new LimitLine(limit, label);
+           l.setLineColor(Color.WHITE);
+           l.setTextColor(Color.WHITE);
+           l.setYOffset(18);
+           l.setTextSize(18);
+           l.setLineWidth(2);
+           l.enableDashedLine(10, 5, 0);
+           l.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
+           return l;
+       }

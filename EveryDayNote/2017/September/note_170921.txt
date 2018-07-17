@@ -1,0 +1,167 @@
+今日：设备共享完成之后的操作
+
+
+
+
+
+        File file= new File("/data/data/"+ getPackageName() +"/shared_prefs",getPackageName() + "_preferences.xml");
+        if (file.exists()) {
+            Log.e(TAG, "onResume: 文件存在:"+file.length() );
+        }
+
+
+        package com.hand.hiot.devicemanager;
+
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.hand.hiot.R;
+import com.hand.hiot.device.domain.devicemanger.DeviceUiObjBean;
+import com.hand.hiot.device.domain.devicemanger.SimpleValue;
+
+public class DeviceDetailActivity extends DeviceManagerBaseActivity {
+
+    public static final String PROPERTY_JSON = "property_bean";
+    public RecyclerView recyclerView;
+    public DeviceUiObjBean uiObjBean;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_device_detail);
+
+        uiObjBean = (DeviceUiObjBean) getIntent().getSerializableExtra(PROPERTY_JSON);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        recyclerView = (RecyclerView) findViewById(R.id.rv_device_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        SectionAdapter adapter = new SectionAdapter();
+        recyclerView.setAdapter(adapter);
+
+    }
+
+
+    private class SectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+            if (viewType == ITEM_TYPE.ITEM1.ordinal()) {
+                return new ViewHolder(LayoutInflater
+                        .from(parent.getContext()).inflate(R.layout.item_section, parent, false));
+            } else {
+                return new SubViewHolder(LayoutInflater
+                        .from(parent.getContext()).inflate(R.layout.item_section_item, parent, false));
+            }
+        }
+
+        // 定义当前位置是属于哪一个section的
+        int sectionP;
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            if (position == count) {
+                ((ViewHolder) holder).bind(uiObjBean.getSectionName(sectionP++));
+                if (temp >= sectionSize) temp = 0;
+                count += uiObjBean.getItemSize(temp++) + 1;
+            } else {
+                int subPosition = position;
+                for (int i = 0; i < sectionP; i++) {
+                    subPosition -= uiObjBean.getItemSize(i);
+                }
+                ((SubViewHolder) holder).bind(uiObjBean.getItem(sectionP, subPosition));
+            }
+
+//            if (holder instanceof ViewHolder) {
+//                ((ViewHolder) holder).tvName.setText(uiObjBean.getSectionName(position));
+//            } else if (holder instanceof SubViewHolder) {
+//                ((SubViewHolder) holder).bind(uiObjBean.getItem(1, position));
+//            }
+////            holder.bind(uiObjBean.getSectionName(position), uiObjBean.getSubList(position));
+        }
+
+        @Override
+        public int getItemCount() {
+            int size = uiObjBean.getSectionSize();
+            for (int i = 0; i < uiObjBean.getSectionSize(); i++) {
+                size += uiObjBean.getItemSize(i);
+            }
+            return size;
+        }
+
+
+        // 这个值代表着section布局的位置
+        int count;
+
+        int temp;
+        int sectionSize = uiObjBean.getSectionSize();
+
+        @Override
+        public int getItemViewType(int position) {
+            if (position == count) {
+                if (temp >= sectionSize) temp = 0;
+                count += uiObjBean.getItemSize(temp++) + 1;
+                return ITEM_TYPE.ITEM1.ordinal();
+            }
+
+//            if (position == 0) {
+//                // 第一个section布局
+//                return ITEM_TYPE.ITEM1.ordinal();
+//            } else if (position == uiObjBean.getItemSize(0)+1) {
+//                // 第二个section布局
+//                return ITEM_TYPE.ITEM1.ordinal();
+//            } else if (position == uiObjBean.getItemSize(0) + uiObjBean.getItemSize(1)+1+1) {
+//                return ITEM_TYPE.ITEM1.ordinal();
+//            }
+            return ITEM_TYPE.ITEM2.ordinal();
+        }
+    }
+
+    enum ITEM_TYPE {
+        ITEM1,
+        ITEM2
+    }
+
+    private class ViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView tvName;
+
+        ViewHolder(View itemView) {
+            super(itemView);
+            tvName = (TextView) itemView.findViewById(R.id.tv_name);
+
+        }
+
+        void bind(String sectionName) {
+            tvName.setText(sectionName);
+        }
+    }
+
+    private class SubViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView tvName;
+        private TextView tvValue;
+
+        SubViewHolder(View itemView) {
+            super(itemView);
+            tvName = (TextView) itemView.findViewById(R.id.tv_name);
+            tvValue = (TextView) itemView.findViewById(R.id.tv_value);
+        }
+
+        void bind(SimpleValue item) {
+            tvName.setText(item.name);
+            tvValue.setText(item.value);
+        }
+    }
+}

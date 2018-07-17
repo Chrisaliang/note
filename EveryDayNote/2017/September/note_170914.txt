@@ -1,0 +1,56 @@
+今日：dawdle I'm always a dawdler
+
+// real embarrassed
+
+今日踩坑：
+
+showAsAction属性共有五个值：ifRoom、never、always、withText、collapseActionView，可以混合使用。
+
+    ifRoom              会显示在Item中，但是如果已经有4个或者4个以上的Item时会隐藏在溢出列表中。
+                          当然个数并不仅仅局限于4个，依据屏幕的宽窄而定。
+
+    never               永远不会显示。只会在溢出列表中显示，而且只显示标题，所以在定义item的时候，最好把标题都带上。
+
+    always              无论是否溢出，总会显示。
+
+    withText            withText值示意Action bar要显示文本标题。Action bar会尽可能的显示这个标题，
+                          但是，如果图标有效并且受到Action bar空间的限制，文本标题有可能显示不全。
+
+    collapseActionView  声明了这个操作视窗应该被折叠到一个按钮中，当用户选择这个按钮时，这个操作视窗展开。
+                          否则，这个操作视窗在默认的情况下是可见的，并且即便在用于不适用的时候，也要占据操作栏的有效空间。
+                          一般要配合ifRoom一起使用才会有效果。
+
+(上面的这段解释依然存在坑的地方，因为showAsAction可以有两种命名空间，
+  也就是Android和tool，Android是系统定义好的，tool是自定义命名空间，
+  ofcause，自定义的命名空间可以是别的任意的名字)
+
+
+
+Dimming the navigation buttons
+
+// -------------------------------------------------------------------
+  getWindow()
+      .getDecorView()
+      .setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+
+// -------------------------------------------------------------------
+
+Using immersive full screen mode
+
+    // This method hides the system bars and resize the content
+    private void hideSystemUI() {
+        getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                        // remove the following flag for version < API 19
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE
+                        );
+    }
+
+
+
+
+My Lord I thank you cause you always help me, you always love me
+
+下班之前一定要提交代码

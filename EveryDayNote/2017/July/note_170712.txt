@@ -1,0 +1,10 @@
+2017年7月12日10:49:44：
+  -- MySQL语句笔记
+    sql中插入字符串类型的值需要使用单引号或者双引号将字符串类型的值括起来
+    pl/sql 过程化的查询语句
+    LIKE：
+      如果 SQL 的 LIKE 子句带有 % 字符，则相当于 UNIX 中的元字符（ * ），
+      在命令行中列出所有的文件或目录。
+      如果 LIKE 子句不带 % 字符，则就相当于 WHERE 子句中带有等号的情况。
+        SELECT field1, field2,...fieldN table_name1, table_name2...
+        WHERE field1 LIKE condition1 [AND [OR]] filed2 = 'somevalue'

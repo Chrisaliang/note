@@ -1,0 +1,19 @@
+Android学习目标：
+
+dagger rxandroid
+
+greenDAO3
+
+低功耗蓝牙
+
+gson
+
+http协议
+
+
+/*(aidl是Android特有)*/
+
+学习步骤：
+
+  1.低功耗蓝牙：
+    beacon

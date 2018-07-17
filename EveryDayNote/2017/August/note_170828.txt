@@ -1,0 +1,82 @@
+深入学习dagger2，掌握dagger2框架
+
+----->
+
+
+
+new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+                    String closeBle = response.body();
+                    Call<String> closeBle1 = repository.closeBle(closeBle);
+                    closeBle1.enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            if (response.isSuccessful()) {
+                                if (TextUtils.equals("true", response.body())) {
+                                    Toast.makeText(getApplicationContext(), "设备已关闭", Toast.LENGTH_SHORT).show();
+                                } else
+                                    Toast.makeText(getApplicationContext(), "关闭不成功", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
+                            Log.e(TAG, "onFailure: call: " + call + "\n........" + t.getMessage(), t);
+                            Toast.makeText(getApplicationContext(), "获取已连接设备失败", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.e(TAG, "onFailure: call: " + call + "\n........" + t.getMessage(), t);
+                Toast.makeText(getApplicationContext(), "获取已连接设备失败", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+
+
+
+
+        new Callback<String[]>() {
+            @Override
+            public void onResponse(Call<String[]> call, Response<String[]> response) {
+                if (response.isSuccessful()) {
+                    String[] body = response.body();
+                    StringBuilder closeBle = new StringBuilder();
+                    closeBle.append('[');
+                    for (String s : body) {
+                        closeBle.append(s);
+                    }
+                    closeBle.append(']');
+                    Call<String> closeBle1 = repository.closeBle(closeBle.toString());
+                    closeBle1.enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            if (response.isSuccessful()) {
+                                if (TextUtils.equals("true", response.body())) {
+                                    Toast.makeText(getApplicationContext(), "设备已关闭", Toast.LENGTH_SHORT).show();
+                                } else
+                                    Toast.makeText(getApplicationContext(), "关闭不成功", Toast.LENGTH_SHORT).show();
+                            }
+                            finish();
+                        }
+
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
+                            Log.e(TAG, "onFailure: call: " + call + "\n........" + t.getMessage(), t);
+                            Toast.makeText(getApplicationContext(), "获取已连接设备失败", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String[]> call, Throwable t) {
+                Log.e(TAG, "onFailure: call: " + call + "\n........" + t.getMessage(), t);
+                Toast.makeText(getApplicationContext(), "获取已连接设备失败", Toast.LENGTH_SHORT).show();
+            }
+        }

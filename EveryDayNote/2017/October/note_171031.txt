@@ -1,0 +1,146 @@
+疯狂敲代码：
+
+
+新布局
+
+
+private PoiSearch.OnPoiSearchListener poiSearchListener = new PoiSearch.OnPoiSearchListener() {
+    @Override
+    public void onPoiSearched(PoiResult poiResult, int errorCode) {
+        if (errorCode != 1000) {
+            showPoiSearchFail(isNextPage(poiResult.getQuery()));
+            return;
+        }
+        // TODO update Header page index and Bottom page Index of refresh_layout
+        mPoiResult = poiResult;
+        Log.d(TAG, "onPoiSearched: " + poiResult);
+        ArrayList<MarkerOptions> markerList = new ArrayList<>();
+        for (PoiItem poi : poiResult.getPois()) {
+            MarkerOptions markerOptions = new MarkerOptions();
+            LatLonPoint point = poi.getLatLonPoint();
+            markerOptions.position(new LatLng(point.getLatitude(), point.getLongitude()))
+                    .draggable(false)
+                    .title(poi.getTitle().trim())
+                    .snippet(poi.getSnippet().trim());
+            markerList.add(markerOptions);
+        }
+        if (markerList.size() > 0) {
+            if (markers != null) {
+                for (Marker marker : markers) {
+                    marker.remove();
+                }
+            }
+            if (mListener == null) Log.d(TAG, "onPoiSearched: mListener null");
+            mListener.updateRouter(null);
+            markers = mListener.updateMarker(markerList);
+            Log.d(TAG, "markers: " + markers);
+            if (poiResult.getPois().size() > 0)
+                adapter.update(poiResult);
+        } else {
+            if (poiResult.getPageCount() > 1)
+                Toast.makeText(getActivity().getApplicationContext(), "没有更多数据了", Toast.LENGTH_SHORT).show();
+        }
+        adapter.index = -1;
+    }
+
+    @Override
+    public void onPoiItemSearched(PoiItem poiItem, int i) {
+        Log.d(TAG, "onPoiItemSearched: " + poiItem);
+    }
+};
+
+
+
+
+
+
+
+
+
+
+-------------------------hot domains:------------------------------------
+10-31 18:13:27.168 28503-28535/com.uaes.android D/awcn.StrategyTable:  api.m.yao.95095.com =
+StrategyList = 1509445107175[{140.205.35.15 443 https}, {140.205.35.15 80 http}]
+10-31 18:13:27.178 28503-28535/com.uaes.android D/awcn.StrategyTable:  unszapi.m.yao.95095.com =
+StrategyList = 1509445107176[{106.11.133.9 443 https}, {106.11.133.9 80 http}]
+10-31 18:13:27.188 28503-28535/com.uaes.android D/awcn.StrategyTable:  amdc.m.taobao.com =
+StrategyList = 1509445107176[{106.11.11.95 443 https}, {106.11.11.95 80 http}]
+10-31 18:13:27.188 28503-28535/com.uaes.android D/awcn.StrategyTable:
+-------------------------cold domains:------------------------------------
+10-31 18:13:27.188 28503-28535/com.uaes.android D/awcn.StrategyTable:  acs4public.m.taobao.com =
+StrategyList = 1509445106679[]
+10-31 18:13:27.198 28503-28535/com.uaes.android D/awcn.SafeAislesMap:  SafeAislesMap: {acs4public.m.taobao.com=No_Result, api.m.yao.95095.com=No_Result, unszapi.m.yao.95095.com=No_Result, amdc.m.taobao.com=http}
+10-31 18:13:27.198 28503-28535/com.uaes.android D/awcn.UnitMap:  UnitMap : UnitMap: {WYgrJS3s3BMDAJDzSQ6/qOAX=unzbyun}
+10-31 18:13:27.198 28503-28535/com.uaes.android I/awcn.StrategyCenter:  saveData
+10-31 18:13:27.198 28503-28535/com.uaes.android D/awcn.StrategyCenter:  getSchemeByHost host:acs4public.m.taobao.com scheme:https
+10-31 18:13:27.198 28503-28535/com.uaes.android D/awcn.SessionCenter: |[seq:24675829] getInternal u:https://acs4public.m.taobao.com TypeClass:SPDY timeout:0
+10-31 18:13:27.218 28503-28535/com.uaes.android D/awcn.StrategyCenter:  getSchemeByHost host:acs4public.m.taobao.com scheme:https
+10-31 18:13:27.218 28503-28535/com.uaes.android D/awcn.SessionCenter: |[seq:24675829] get internal hit cache session session:Session@[24675829.AWCN1_1|http2_0rtt_acs]
+10-31 18:13:27.218 28503-28535/com.uaes.android D/awcn.DefaultAppMonitor:  commit stat: amdc
+    Dimensions:{a=1000, b=request success, c=106.11.12.92, d=http://106.11.12.92:80/amdc/mobileDispatch?appkey=24675829&deviceId=WYgrJS3s3BMDAJDzSQ6%2FqOAX&platform=android&v=4.0, h=, f=WIFI, g=, e=1}
+    Measures:{}
+10-31 18:13:27.228 28503-28535/com.uaes.android D/awcn.StrategyTable:  [notifyConnEvent] Host:amdc.m.taobao.com IConnStrategy:{106.11.12.92 80 http} ConnEvent:ConnEvent#Success
+10-31 18:13:27.268 28503-28503/com.uaes.android D/GasStationFragment: onCalculateRouteSuccess: 2
+10-31 18:13:27.348 28503-28503/com.uaes.android D/AndroidRuntime: Shutting down VM
+10-31 18:13:27.348 28503-28503/com.uaes.android W/dalvikvm: threadid=1: thread exiting with uncaught exception (group=0x41a20ba8)
+10-31 18:13:27.418 28503-28503/com.uaes.android E/AndroidRuntime: FATAL EXCEPTION: main
+Process: com.uaes.android, PID: 28503
+java.lang.NullPointerException
+at com.uaes.android.gasstation.GasStationRouterFragment$StationRouterViewHolder.bind(GasStationRouterFragment.java:423)
+at com.uaes.android.gasstation.GasStationRouterFragment$StationRouterAdapter.onBindViewHolder(GasStationRouterFragment.java:393)
+at com.uaes.android.gasstation.GasStationRouterFragment$StationRouterAdapter.onBindViewHolder(GasStationRouterFragment.java:379)
+at android.support.v7.widget.RecyclerView$Adapter.onBindViewHolder(RecyclerView.java:6482)
+at android.support.v7.widget.RecyclerView$Adapter.bindViewHolder(RecyclerView.java:6515)
+at android.support.v7.widget.RecyclerView$Recycler.tryBindViewHolderByDeadline(RecyclerView.java:5458)
+at android.support.v7.widget.RecyclerView$Recycler.tryGetViewHolderForPositionByDeadline(RecyclerView.java:5724)
+at android.support.v7.widget.RecyclerView$Recycler.getViewForPosition(RecyclerView.java:5563)
+at android.support.v7.widget.RecyclerView$Recycler.getViewForPosition(RecyclerView.java:5559)
+at android.support.v7.widget.LinearLayoutManager$LayoutState.next(LinearLayoutManager.java:2229)
+at android.support.v7.widget.LinearLayoutManager.layoutChunk(LinearLayoutManager.java:1556)
+at android.support.v7.widget.LinearLayoutManager.fill(LinearLayoutManager.java:1516)
+at android.support.v7.widget.LinearLayoutManager.onLayoutChildren(LinearLayoutManager.java:608)
+at android.support.v7.widget.RecyclerView.dispatchLayoutStep2(RecyclerView.java:3693)
+at android.support.v7.widget.RecyclerView.onMeasure(RecyclerView.java:3109)
+at android.view.View.measure(View.java:16497)
+at android.view.ViewGroup.measureChildWithMargins(ViewGroup.java:5125)
+at android.widget.FrameLayout.onMeasure(FrameLayout.java:310)
+at android.view.View.measure(View.java:16497)
+at android.widget.LinearLayout.measureVertical(LinearLayout.java:847)
+at android.widget.LinearLayout.onMeasure(LinearLayout.java:588)
+at android.view.View.measure(View.java:16497)
+at android.view.ViewGroup.measureChildWithMargins(ViewGroup.java:5125)
+at android.widget.FrameLayout.onMeasure(FrameLayout.java:310)
+at android.view.View.measure(View.java:16497)
+at android.view.ViewGroup.measureChildWithMargins(ViewGroup.java:5125)
+at android.widget.FrameLayout.onMeasure(FrameLayout.java:310)
+at android.support.v7.widget.CardView.onMeasure(CardView.java:216)
+at android.view.View.measure(View.java:16497)
+at android.view.ViewGroup.measureChildWithMargins(ViewGroup.java:5125)
+at android.support.design.widget.CoordinatorLayout.onMeasureChild(CoordinatorLayout.java:714)
+at android.support.design.widget.CoordinatorLayout.onMeasure(CoordinatorLayout.java:786)
+at android.view.View.measure(View.java:16497)
+at android.view.ViewGroup.measureChildWithMargins(ViewGroup.java:5125)
+at android.widget.FrameLayout.onMeasure(FrameLayout.java:310)
+at android.support.v7.widget.ContentFrameLayout.onMeasure(ContentFrameLayout.java:139)
+at android.view.View.measure(View.java:16497)
+at android.view.ViewGroup.measureChildWithMargins(ViewGroup.java:5125)
+at android.widget.LinearLayout.measureChildBeforeLayout(LinearLayout.java:1404)
+at android.widget.LinearLayout.measureVertical(LinearLayout.java:695)
+at android.widget.LinearLayout.onMeasure(LinearLayout.java:588)
+at android.view.View.measure(View.java:16497)
+at android.view.ViewGroup.measureChildWithMargins(ViewGroup.java:5125)
+at android.widget.FrameLayout.onMeasure(FrameLayout.java:310)
+at android.view.View.measure(View.java:16497)
+at android.view.ViewGroup.measureChildWithMargins(ViewGroup.java:5125)
+at android.widget.LinearLayout.measureChildBeforeLayout(LinearLayout.java:1404)
+at android.widget.LinearLayout.measureVertical(LinearLayout.java:695)
+at android.widget.LinearLayout.onMeasure(LinearLayout.java:588)
+at android.view.View.measure(View.java:16497)
+at android.view.ViewGroup.measureChildWithMargins(ViewGroup.java:5125)
+at android.widget.FrameLayout.onMeasure(FrameLayout.java:310)
+at com.android.internal.policy.impl.PhoneWindow$Dec
+10-31 18:13:27.568 28503-28536/com.uaes.android I/awcn.SerializeHelper:  persist end. file:/sdcard/Android/data/com.uaes.android/files/awcn_strategy/e0421797eb74dbd8ce9183630ae541fa cost:358
+10-31 18:13:27.708 28503-28536/com.uaes.android I/awcn.SerializeHelper:  persist end. file:/sdcard/Android/data/com.uaes.android/files/awcn_strategy/0c61135c2fdcd71f15ad7297245abe44 cost:141
+10-31 18:13:27.978 28503-28575/com.uaes.android D/dalvikvm: GC_FOR_ALLOC freed 2199K, 36% free 6781K/10592K, paused 198ms, total 200ms
+10-31 18:13:27.998 28503-28536/com.uaes.android I/awcn.SerializeHelper:  persist end. file:/sdcard/Android/data/com.uaes.android/files/awcn_strategy/49c6a36aaea8ee1549c1cd3e07070c79 cost:287
+10-31 18:13:44.198 28503-28503/com.uaes.android I/Process: Sending signal. PID: 28503 SIG: 9

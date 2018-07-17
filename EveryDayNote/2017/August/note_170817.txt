@@ -1,0 +1,32 @@
+今日内容：完成recyclerview的替换，练习MVP
+
+
+差值器Interpolator：
+1)  BounceInterpolator：弹跳效果；
+2)  AccelerateInterpolator：逐渐加速；
+3)  DecelerateInterpolator：逐渐减速；
+4)  AccelerateDecelerateInterpolator：先加速后减速；
+5)  OvershootInterpolator：到达目标点时“跑过头了”，再返回到目标点；
+6)  AnticipateInterpolator：移动之前先向后“助跑”；
+7)  AnticipateOvershootInterpolator：OvershootInterpolator和AnticipateInterpolator的组合效果；
+8)  CycleInterpolator：对于指定的动画，正向做一遍，反响做一遍；
+
+  Android中还为我们提供了一个接口TimeInterpolator，供我们自定义插值器。
+  我们也可以实现TimeInterpolator的一些已有实现类（如BaseInterpolator、Interpolator）来自定义插值器。
+
+　TimeInterpolator接口中又一个抽象方法setInterpolation()，方法中又一个参数input，
+  这个参数的值在整个动画过程中从0匀速变化到1，也就是相当于一个百分比，指示当前动画播放到哪了。
+
+  如果我们在这个方法中直接返回input参数，那么这个插值器就是一个匀速插值器，
+  Android默认给我们提供的LinearInterpolator就是这样写的，源码如下：
+
+  public class LinearInterpolator extends BaseInterpolator implements NativeInterpolatorFactory {
+    public float getInterpolation(float input) {
+        return input;  //匀速
+    }
+  }
+
+  git 学习中，遇到了一个问题，需要细心才能解决
+
+
+  练习MVC和MVP

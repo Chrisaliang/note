@@ -1,0 +1,13 @@
+今日：greenDao存储设备属性数据结构
+
+
+very hard
+
+
+
+
+
+how to convert json to jsonObject
+
+      String json = "{haha:hshd}";
+      JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();

@@ -1,0 +1,17 @@
+今日：设备共享
+
+shareDevice
+
+
+// copy text from alertDialog
+
+// The TextView to show your Text
+TextView showText = new TextView(this);
+showText.setText("Some selectable text goes here.");
+showText.setTextIsSelectable(true);
+AlertDialog.Builder builder = new AlertDialog.Builder(this);
+// Build the Dialog
+builder.setView(showText)
+       .setTitle("Selectable text")
+       .setCancelable(true)
+       .show();

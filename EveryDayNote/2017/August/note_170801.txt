@@ -1,0 +1,46 @@
+今日学习greenDao的使用：
+
+  1.配置
+  根gradle里添加
+      classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2'
+  项目gradle里添加
+      apply plugin: 'org.greenrobot.greendao'
+      compile 'org.greenrobot:greendao:3.2.2'依赖
+  项目gradle里配置路径版本等信息
+      greendao {
+          schemaVersion 1
+          daoPackage 'com.hand.greendaodemo.gen'
+          targetGenDir 'src/main/java'
+      }
+
+  2.创建实体类，添加注解，初始化表结构
+
+  3.编译项目，生成相关类
+
+  4.在myApplication类中初始化数据库，名称，等
+      // 通过 DaoMaster 的内部类 DevOpenHelper，你可以得到一个便利的 SQLiteOpenHelper 对象。
+      // 可能你已经注意到了，你并不需要去编写「CREATE TABLE」这样的 SQL 语句，因为 greenDAO 已经帮你做了。
+      // 注意：默认的 DaoMaster.DevOpenHelper 会在数据库升级时，删除所有的表，意味着这将导致数据的丢失。
+      // 所以，在正式的项目中，你还应该做一层封装，来实现数据库的安全升级。
+      mHelper = new DaoMaster.DevOpenHelper(this, "notes-db", null);
+      db = mHelper.getReadableDatabase();
+      mDaoMaster = new DaoMaster(db);
+      mDaoSession = mDaoMaster.newSession();
+
+  5.使用增删改查
+
+
+
+adb拉取模拟器中的数据库文件步骤：
+
+  1.Android Device Monitor 要在模拟器运行之前就打开，这样才不会出现模拟器设备 offline 的问题。
+  2.Android Device Monitor 和 Instant Run 貌似有冲突，在用 Android Device Monitor 时关闭
+    Instant Run 功能。我相信还有更好的解决方法，不然打开一个大一点的 APP，不能同时用这两个功能，
+    那多影响效率啊。只是我目前还处于学习阶段，上述方案能解决我当前的问题，不影响我进一步学习，
+    那它就是 OK 的。
+  3.操作 Android Device Monitor 时，应该默认把你当做其他人（other）对待，所以你对文件的访
+    问权限很受限制。解决方法是在命令行中，通过在 adb shell 里获取 root 权限，并更改相应文件的
+    访问权限，当然记得将 adb 所在目录添加进环境变量。
+  4.能访问了但是不能下载也是很麻烦的事，通过在命令行运行 adb root 获取文件的下载权限。
+    chmod 777 /path
+  5.

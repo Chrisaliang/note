@@ -1,0 +1,20 @@
+今日：集成高德地图
+
+修复昨日bug
+
+
+
+09-28 16:22:28.207 19949-19949/com.hand.hiot D/LoginActivity: beforeTextChanged: s:adg start:3 count0 after32
+09-28 16:22:28.214 19949-19949/com.hand.hiot D/LoginActivity: onTextChanged: s:adg1f3c7fcffb6b4fda8b8f1045886c95b5 start:3 before0 count32
+09-28 16:22:28.241 19949-19949/com.hand.hiot D/LoginActivity: afterTextChanged: s:adg1f3c7fcffb6b4fda8b8f1045886c95b5
+
+
+09-28 16:22:58.888 19949-19949/com.hand.hiot D/LoginActivity: beforeTextChanged: s:adg1f3c7fcffb6b4fda8b8f1045886c95b5 start:34 count1 after0
+09-28 16:22:58.891 19949-19949/com.hand.hiot D/LoginActivity: onTextChanged: s:adg1f3c7fcffb6b4fda8b8f1045886c95b start:34 before1 count0
+09-28 16:22:58.891 19949-19949/com.hand.hiot D/LoginActivity: afterTextChanged: s:adg1f3c7fcffb6b4fda8b8f1045886c95b
+
+
+String sql_userlogin="select * from question inner join teacher on question.q_teacher=teacher.id
+
+ where question.q_id=? and teacher.t_name=? and teacher.password=? and teacher.isActive=?";
+Object[] params={q_id,t_name,password,"1"};

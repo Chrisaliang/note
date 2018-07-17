@@ -1,0 +1,14 @@
+codinnnnnnnnng
+
+
+@POST("/fuelfill/v1/1/fillRecord/registFillRecord")
+@GET("/fuelconp/v1/usedKm/addFuel")
+@GET("/fuelfill/v1/fillRecord/app/findListPageApp")
+@GET("/cars/v1/carService/getFuelHelperByVin")
+@GET("/cars/v1/fuel/consumption/dashboard/queryByYear")
+@GET("/cars/v1/fuel/consumption/dashboard/queryByMile")
+@POST("/gas/v1/gasStation/getGasStationNearBy")
+@POST("/car/v1/carAttribute/create")
+@POST("/car/v1/carAttribute/byAttributes/{vin}")
+@GET("pub/v1/common/viewAuth")
+@GET("/{path}")

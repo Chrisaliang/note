@@ -1,0 +1,42 @@
+今日：修改设备影子的属性的属性类
+每一个属性都有该属性的属性，这就是Property类存在的意义
+该类中，有key，value，minValue，maxValue，type，description六个属性，也就是每一个属性本身有六个属性
+
+
+[
+  DeviceShadow{
+    name='firstDevice',
+    type='TV',
+    properties={
+      val=Property{
+        key='val',
+        type=0,
+        value=50,
+        maxValue=0,
+        minValue=0,
+        description='null'
+      },
+      light=Property{
+        key='light',
+        type=0,
+        value=70,
+        maxValue=0,
+        minValue=0,
+        description='null'
+      },
+      switch=Property{
+        key='switch',
+        type=0,
+        value=true,
+        maxValue=0,
+        minValue=0,
+        description='null'
+      }
+    }
+  },
+  DeviceShadow{
+    name='second',
+    type='PC',
+    properties=null
+  }
+]

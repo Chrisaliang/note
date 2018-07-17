@@ -1,0 +1,22 @@
+今日： 解决已有的问题和bug，学习二维码识别
+
+
+
+登录 带Token
+
+@FormUrlEncoded
+@POST("oauth/oauth/token")
+Single<RegisterResponseBean> register(@Field("username") String username,
+                                      @Field("password") String password,
+                                      @Field("grant_type") String type);
+
+
+OKHttp3 添加拦截器，修改请求头
+
+          Request request = chain.request();
+          Request build = request.newBuilder()
+                  // 这里可以添加修改请求头
+                  .header("Token", token)
+                  .build();
+          return  chain.proceed(build).newBuilder()
+                  .build();

@@ -1,0 +1,116 @@
+2012-06-19 19:14
+首先在oracle中没有datediff()函数可以用
+以下方法在oracle中实现该函数的功能:
+1.利用日期间的加减运算
+天：ROUND(TO_NUMBER(END_DATE - START_DATE))
+小时：ROUND(TO_NUMBER(END_DATE - START_DATE) * 24)
+分钟：ROUND(TO_NUMBER(END_DATE - START_DATE) * 24 * 60)
+秒：ROUND(TO_NUMBER(END_DATE - START_DATE) * 24 * 60 * 60)
+毫秒：ROUND(TO_NUMBER(END_DATE - START_DATE) * 24 * 60 * 60 * 60)
+2.写函数
+Create Or Replace Function CDate(Datechar In Varchar2)
+Return Date
+Is ReallyDo Date;
+Begin
+Select
+to_date(to_char(to_date(to_char(Datechar), 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD'), 'YYYY-MM-DD')
+Into ReallyDo
+From Dual;
+Return(ReallyDo);
+End CDate;
+Create Or Replace Function CDateTime(Datechar In Varchar2)
+Return Date
+Is ReallyDo Date;
+Begin
+ Select
+ to_date(to_char(to_date(to_char(Datechar), 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')
+ Into ReallyDo
+ From Dual;
+ Return(ReallyDo);
+ End CDateTime;
+ Create Or Replace Function Datediff ( Datepart In Varchar2, StartDate In Varchar2, EndDate In Varchar2 )
+ Return Number
+ Is ReallyDo Numeric;
+ Begin
+ Select
+ Case Upper(Datepart)
+ When 'YYYY'
+ Then
+ Trunc(Extract(Year From CDate(EndDate)) - Extract(Year From CDate(StartDate)))
+ When 'M'
+ Then
+ Datediff('YYYY', StartDate, EndDate) * 12 + (Extract(Month From CDate(EndDate)) - Extract(Month From CDate(StartDate)))
+ When 'D'
+ Then
+ Trunc(CDate(EndDate) - CDate(StartDate))
+ When 'H'
+ Then
+ Datediff('D', StartDate, EndDate) * 24 + (to_Number(to_char(CDateTime(EndDate), 'HH24'))
+  - to_Number(to_char(CDateTime(StartDate), 'HH24')))
+  When 'N'
+  Then
+  Datediff('D', StartDate, EndDate) * 24 * 60 + (to_Number(to_char(CDateTime(EndDate), 'MI'))
+   - to_Number(to_char(CDateTime(StartDate), 'MI')))
+   When 'S'
+   Then
+   Datediff('D', StartDate, EndDate) * 24 * 60 * 60 + (to_Number(to_char(CDateTime(EndDate), 'SS'))
+    - to_Number(to_char(CDateTime(StartDate), 'SS')))
+    Else -29252888
+    End
+     Into ReallyDo
+     From Dual;
+     Return(ReallyDo);
+     End Datediff;
+
+
+
+     //日期加减运算
+
+     (1)
+
+     select getdate() 获得当天日期如： 2011-10-29 17:21:57.640
+
+     select getdate()-1 指在天数上减去1天 2011-10-29 17:22:34.857
+
+     如果我不想要后边的时间，只要前面的日期
+
+     select convert (varchar(100),getdate(),23) 结果为：2011-10-29
+
+     (2)
+
+     日期加月份：
+
+     select dateadd(month,6,getdate())
+
+     (3)
+
+     select datediff(year, 开始日期,结束日期); --两日期间隔年
+
+     select datediff(quarter, 开始日期,结束日期); --两日期间隔季
+
+     select datediff(month, 开始日期,结束日期); --两日期间隔月
+
+     select datediff(day, 开始日期,结束日期); --两日期间隔天
+
+     select datediff(d,convert(char(10),min(create_date),120),convert(char(10),max(create_date),120))+1 days
+
+     select datediff(week, 开始日期,结束日期); --两日期间隔周
+
+     select datediff(hour, 开始日期,结束日期); --两日期间隔小时
+
+     select datediff(minute, 开始日期,结束日期); --两日期间隔分
+
+     select datediff(second, 开始日期,结束日期); --两日期间隔秒
+
+错误：
+
+select departments.department_id DEPARTMENT_ID,
+       departments.department_name DEPARTMENT_NAME,
+       departments.location_id LOCATION_ID
+       (count(employee_id) from employees ) CUNT(E.EMPLOYEE_ID)
+from departments,employees
+where employees.department_id = departments.department_id
+group by departments.department_id,
+         departments.department_name,
+         departments.location_id;
+         rollup(departments.department_id)
